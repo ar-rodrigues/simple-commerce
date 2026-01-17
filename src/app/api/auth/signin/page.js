@@ -1,12 +1,13 @@
 'use client'
+import { Suspense } from 'react'
 import { signIn } from 'next-auth/react'
 import { useSearchParams } from 'next/navigation'
-import { Button, Typography, Card } from 'antd'
+import { Button, Typography, Card, Spin } from 'antd'
 import { RiLoginBoxLine, RiShieldCheckLine } from 'react-icons/ri'
 
 const { Title, Text } = Typography
 
-export default function SignInPage() {
+function SignInContent() {
   const searchParams = useSearchParams()
   const callbackUrl = searchParams.get('callbackUrl') || '/admin'
 
@@ -15,7 +16,7 @@ export default function SignInPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-green-50 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-linear-to-br from-green-50 via-white to-green-50 flex items-center justify-center p-4">
         <Card
           className="max-w-md w-full shadow-2xl border-0"
           style={{
@@ -26,7 +27,7 @@ export default function SignInPage() {
           <div className="text-center py-8 px-6">
             {/* Icon Container */}
             <div className="mb-6">
-              <div className="w-24 h-24 mx-auto mb-4 bg-gradient-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center shadow-lg">
+              <div className="w-24 h-24 mx-auto mb-4 bg-linear-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center shadow-lg">
                 <RiShieldCheckLine className="text-5xl text-white" />
               </div>
             </div>
@@ -80,5 +81,19 @@ export default function SignInPage() {
           </div>
         </Card>
     </div>
+  )
+}
+
+export default function SignInPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-linear-to-br from-green-50 via-white to-green-50 flex items-center justify-center">
+          <Spin size="large" />
+        </div>
+      }
+    >
+      <SignInContent />
+    </Suspense>
   )
 }
