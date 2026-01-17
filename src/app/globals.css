@@ -1,0 +1,327 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Carousel Styles */
+.carousel-dots {
+  bottom: 20px !important;
+}
+
+.carousel-dots li button {
+  background: rgba(255, 255, 255, 0.7) !important;
+  border: 2px solid rgba(255, 255, 255, 0.9) !important;
+  width: 12px !important;
+  height: 12px !important;
+}
+
+.carousel-dots li.slick-active button {
+  background: rgba(255, 255, 255, 1) !important;
+  border-color: rgba(34, 197, 94, 1) !important;
+  border-width: 3px !important;
+}
+
+/* Navbar Improvements */
+.ant-layout-header {
+  background: transparent !important;
+  padding: 0 !important;
+  line-height: normal !important;
+  height: auto !important;
+}
+
+/* Admin Header - Override transparent background */
+.admin-header.ant-layout-header {
+  background: linear-gradient(to right, #16a34a, #15803d) !important;
+}
+
+/* Better text contrast */
+.text-gray-800 {
+  color: #1f2937 !important;
+}
+
+.text-gray-700 {
+  color: #374151 !important;
+}
+
+/* Navbar Input Styles */
+.ant-input {
+  box-shadow: none !important;
+}
+
+.ant-input:focus,
+.ant-input-focused {
+  box-shadow: none !important;
+  border-color: transparent !important;
+}
+
+/* Navbar rounded pill effect */
+.navbar-pill {
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* Navbar Scroll Animation */
+.navbar-drawer .ant-drawer-header {
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.navbar-drawer .ant-drawer-body {
+  padding: 24px;
+}
+
+/* Shimmer animation for image placeholders */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 2s infinite;
+}
+
+/* Admin Table Styles */
+.admin-table .ant-table {
+  border-radius: 12px;
+}
+
+.admin-table .ant-table-thead > tr > th {
+  background: linear-gradient(to bottom, #f9fafb, #f3f4f6);
+  font-weight: 600;
+  border-bottom: 2px solid #e5e7eb;
+  padding: 16px 12px;
+}
+
+.admin-table .ant-table-tbody > tr {
+  transition: all 0.3s ease;
+}
+
+.admin-table .ant-table-tbody > tr:hover {
+  background: #f0fdf4 !important;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(34, 197, 94, 0.1);
+}
+
+.admin-table .ant-table-tbody > tr > td {
+  padding: 16px 12px;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+/* Admin Modal Styles */
+.admin-modal .ant-modal-content {
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+}
+
+.admin-modal .ant-modal-header {
+  border: none;
+  padding: 0;
+}
+
+.admin-modal .ant-modal-body {
+  padding: 24px 28px;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.admin-modal .ant-modal-footer {
+  border-top: 1px solid #f0f0f0;
+  padding: 16px 24px;
+  margin-top: 8px;
+}
+
+/* Modal Form Inputs */
+.admin-modal .ant-input,
+.admin-modal .ant-input-number,
+.admin-modal .ant-input-textarea {
+  transition: all 0.3s ease;
+}
+
+.admin-modal .ant-input:hover,
+.admin-modal .ant-input-number:hover,
+.admin-modal .ant-input-textarea:hover {
+  border-color: #4ade80;
+}
+
+.admin-modal .ant-input:focus,
+.admin-modal .ant-input-number:focus,
+.admin-modal .ant-input-textarea:focus {
+  border-color: #22c55e;
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1);
+}
+
+/* Upload Styles */
+.upload-modern .ant-upload.ant-upload-select {
+  width: 100% !important;
+  height: auto !important;
+  border: 2px dashed #d1d5db !important;
+  border-radius: 16px !important;
+  background: #fafafa !important;
+  transition: all 0.3s ease !important;
+}
+
+.upload-modern .ant-upload.ant-upload-select:hover {
+  border-color: #22c55e !important;
+  background: #f0fdf4 !important;
+}
+
+/* Modal Tabs */
+.modal-image-tabs .ant-tabs-nav {
+  margin-bottom: 0 !important;
+}
+
+.modal-image-tabs .ant-tabs-tab {
+  padding: 12px 20px !important;
+  font-weight: 500 !important;
+}
+
+.modal-image-tabs .ant-tabs-tab-active {
+  background: linear-gradient(to bottom, #f0fdf4, #dcfce7) !important;
+}
+
+.modal-image-tabs .ant-tabs-ink-bar {
+  background: #22c55e !important;
+  height: 3px !important;
+}
+
+/* Smooth scrollbar for modal */
+.admin-modal .ant-modal-body::-webkit-scrollbar {
+  width: 8px;
+}
+
+.admin-modal .ant-modal-body::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 10px;
+}
+
+.admin-modal .ant-modal-body::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 10px;
+}
+
+.admin-modal .ant-modal-body::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Stats Card Hover Effect */
+.stats-card {
+  transition: all 0.3s ease;
+}
+
+.stats-card:hover {
+  transform: translateY(-4px);
+}
+
+/* Admin Page - Override ALL Ant Design default blue buttons to green */
+.admin-page .ant-btn-primary,
+.admin-page .ant-btn-primary:not([style*="background"]):not([style*="backgroundColor"]) {
+  background: #16a34a !important;
+  border-color: #16a34a !important;
+  color: #ffffff !important;
+}
+
+.admin-page .ant-btn-primary:hover:not([style*="background"]):not([style*="backgroundColor"]) {
+  background: #15803d !important;
+  border-color: #15803d !important;
+}
+
+.admin-page .ant-btn-primary:focus:not([style*="background"]):not([style*="backgroundColor"]) {
+  background: #16a34a !important;
+  border-color: #16a34a !important;
+  box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.2) !important;
+}
+
+/* Override modal buttons in admin */
+.admin-modal .ant-btn-primary {
+  background: #16a34a !important;
+  border-color: #16a34a !important;
+  color: #ffffff !important;
+}
+
+.admin-modal .ant-btn-primary:hover {
+  background: #15803d !important;
+  border-color: #15803d !important;
+}
+
+/* Override ALL Ant Design primary buttons to green (home page and everywhere) */
+.ant-btn-primary:not([style*="background"]):not([style*="backgroundColor"]) {
+  background: #16a34a !important;
+  border-color: #16a34a !important;
+  color: #ffffff !important;
+}
+
+.ant-btn-primary:hover:not([style*="background"]):not([style*="backgroundColor"]) {
+  background: #15803d !important;
+  border-color: #15803d !important;
+}
+
+.ant-btn-primary:focus:not([style*="background"]):not([style*="backgroundColor"]) {
+  background: #16a34a !important;
+  border-color: #16a34a !important;
+  box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.2) !important;
+}
+
+/* Override Ant Design default blue link colors */
+/* Navbar links - ensure no blue, respect green classes */
+nav a,
+nav a:hover,
+nav a:visited,
+nav a:active {
+  color: inherit !important;
+}
+
+/* Drawer menu links - ensure no blue */
+.ant-drawer-body a,
+.ant-drawer-body a:hover,
+.ant-drawer-body a:visited,
+.navbar-drawer a,
+.navbar-drawer a:hover {
+  color: inherit !important;
+}
+
+/* Footer links - ensure no blue, keep gray colors */
+footer a,
+footer a:hover,
+footer a:visited {
+  color: inherit !important;
+}
+
+/* Override Ant Design Typography default blue links */
+.ant-typography a,
+.ant-typography a:hover,
+.ant-typography a:visited {
+  color: inherit !important;
+}
+
+/* Force all links to respect their text color classes */
+a[class*="text-green"],
+a[class*="text-gray"],
+a[class*="text-white"] {
+  color: inherit !important;
+}
