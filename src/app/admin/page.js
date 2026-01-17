@@ -25,7 +25,7 @@ export default function AdminDashboard() {
   const [imageMode, setImageMode] = useState('upload'); // 'upload' or 'url'
 
   // Redirigir si no está autenticado
-  // La verificación del email se hace en el middleware y auth.js
+  // La verificación del email se hace en el proxy y auth.js
   useEffect(() => {
     if (status === 'unauthenticated') {
       router.push('/');
