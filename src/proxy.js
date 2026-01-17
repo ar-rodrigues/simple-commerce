@@ -14,10 +14,12 @@ export default auth((req) => {
       const hasSession = session && session.user
       
       if (!hasSession) {
-        // Redirigir a la página principal si no está autenticado
-        // Usar URL absoluta para evitar problemas en producción
-        const redirectUrl = new URL("/", req.url)
-        return NextResponse.redirect(redirectUrl)
+        // Redirigir directamente al proceso de sign-in con callbackUrl a /admin
+        // Esto permite que el usuario acceda directamente a /admin y sea redirigido al login
+        // Después del login exitoso, será redirigido de vuelta a /admin
+        const signInUrl = new URL("/api/auth/signin", req.url)
+        signInUrl.searchParams.set("callbackUrl", `${req.nextUrl.origin}/admin`)
+        return NextResponse.redirect(signInUrl)
       }
       
       // Verificación adicional: asegurar que el email está en la lista permitida

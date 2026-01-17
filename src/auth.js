@@ -59,19 +59,30 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       return false
     },
     async redirect({ url, baseUrl }) {
-      // Después de iniciar sesión exitosamente, siempre redirigir al panel de admin
       // No redirigir si es una ruta de API o signout
       if (url.startsWith('/api/auth/signout') || url.startsWith(`${baseUrl}/api/auth/signout`)) {
         return url
       }
-      // Si la URL ya es una URL completa y apunta a admin, usarla
-      if (url.startsWith('http') && url.includes('/admin')) {
+      
+      // Si la URL es relativa y apunta a /admin, construir la URL completa
+      if (url.startsWith('/admin')) {
+        return `${baseUrl}${url}`
+      }
+      
+      // Si la URL ya es una URL completa, usarla directamente
+      if (url.startsWith('http')) {
         return url
       }
-      // Redirigir a admin después de cualquier inicio de sesión exitoso
-      // Usar baseUrl para asegurar la URL correcta en producción
-      const adminUrl = url.startsWith('/admin') ? url : '/admin'
-      return `${baseUrl}${adminUrl.startsWith('/') ? '' : '/'}${adminUrl}`
+      
+      // Si viene un callbackUrl (por ejemplo, desde el proxy), respetarlo
+      // Si no, redirigir a admin por defecto
+      if (url && url !== baseUrl && !url.startsWith('/')) {
+        // Es una URL relativa que no empieza con /
+        return `${baseUrl}/${url}`
+      }
+      
+      // Por defecto, redirigir a admin
+      return `${baseUrl}/admin`
     },
     async jwt({ token, account }) {
       if (account) {
