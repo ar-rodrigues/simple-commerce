@@ -4,6 +4,8 @@ import Google from "next-auth/providers/google"
 export const { handlers, auth, signIn, signOut } = NextAuth({
   // Configurar la URL base para Vercel
   trustHost: true,
+  // Asegurar que el secret esté configurado
+  secret: process.env.AUTH_SECRET,
   providers: [
     Google({
       clientId: process.env.AUTH_GOOGLE_ID,
