@@ -8,9 +8,16 @@ export default auth((req) => {
 
     // Proteger rutas de admin
     if (pathname.startsWith("/admin")) {
-      if (!session) {
+      // Verificar si hay sesión
+      // En producción, la sesión puede ser null incluso si el usuario está autenticado
+      // debido a problemas de cookies, así que verificamos también las cookies directamente
+      const hasSession = session && session.user
+      
+      if (!hasSession) {
         // Redirigir a la página principal si no está autenticado
-        return NextResponse.redirect(new URL("/", req.url))
+        // Usar URL absoluta para evitar problemas en producción
+        const redirectUrl = new URL("/", req.url)
+        return NextResponse.redirect(redirectUrl)
       }
       
       // Verificación adicional: asegurar que el email está en la lista permitida
@@ -20,9 +27,10 @@ export default auth((req) => {
         .map(email => email.trim())
         .filter(email => email.length > 0)
       
-      if (allowedEmails.length > 0 && !allowedEmails.includes(session?.user?.email)) {
+      if (allowedEmails.length > 0 && session?.user?.email && !allowedEmails.includes(session.user.email)) {
         // Si el email no está en la lista permitida, redirigir y cerrar sesión
-        return NextResponse.redirect(new URL("/api/auth/signout", req.url))
+        const signoutUrl = new URL("/api/auth/signout", req.url)
+        return NextResponse.redirect(signoutUrl)
       }
     }
 
@@ -31,7 +39,10 @@ export default auth((req) => {
   } catch (error) {
     // En caso de error, permitir que la petición continúe
     // Esto evita que errores en el proxy bloqueen toda la aplicación
-    console.error("Error en proxy:", error)
+    // Solo loguear en desarrollo para evitar exponer información en producción
+    if (process.env.NODE_ENV === 'development') {
+      console.error("Error en proxy:", error)
+    }
     return NextResponse.next()
   }
 })

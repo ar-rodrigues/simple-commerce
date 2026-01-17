@@ -6,6 +6,20 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   trustHost: true,
   // Asegurar que el secret esté configurado
   secret: process.env.AUTH_SECRET,
+  // Configurar cookies para producción
+  cookies: {
+    sessionToken: {
+      name: process.env.NODE_ENV === 'production'
+        ? '__Secure-authjs.session-token'
+        : 'authjs.session-token',
+      options: {
+        httpOnly: true,
+        sameSite: 'lax',
+        path: '/',
+        secure: process.env.NODE_ENV === 'production',
+      },
+    },
+  },
   providers: [
     Google({
       clientId: process.env.AUTH_GOOGLE_ID,
@@ -50,8 +64,14 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       if (url.startsWith('/api/auth/signout') || url.startsWith(`${baseUrl}/api/auth/signout`)) {
         return url
       }
+      // Si la URL ya es una URL completa y apunta a admin, usarla
+      if (url.startsWith('http') && url.includes('/admin')) {
+        return url
+      }
       // Redirigir a admin después de cualquier inicio de sesión exitoso
-      return `${baseUrl}/admin`
+      // Usar baseUrl para asegurar la URL correcta en producción
+      const adminUrl = url.startsWith('/admin') ? url : '/admin'
+      return `${baseUrl}${adminUrl.startsWith('/') ? '' : '/'}${adminUrl}`
     },
     async jwt({ token, account }) {
       if (account) {
