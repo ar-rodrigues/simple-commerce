@@ -4,7 +4,7 @@ import { Card, Skeleton } from 'antd';
 export default function ProductCardSkeleton() {
   return (
     <Card className="h-full flex flex-col shadow-md">
-      <div className="w-full h-48 bg-gray-200 relative overflow-hidden">
+      <div className="w-full h-56 bg-gray-100 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-gray-200 via-gray-100 to-gray-200 animate-pulse"></div>
         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer"></div>
       </div>

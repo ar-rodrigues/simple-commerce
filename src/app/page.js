@@ -9,6 +9,7 @@ import {
   Typography,
   Divider,
   Button,
+  Modal,
 } from "antd";
 import Link from "next/link";
 import useCatalog from "@/hooks/useCatalog";
@@ -72,6 +73,7 @@ export default function Home() {
   const { data: items, loading, error } = useCatalog();
   const { data: homeData, loading: homeLoading } = useHomeContent();
   const [isHovering, setIsHovering] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
 
   const carouselImages = useMemo(() => {
     const list = homeData?.carousel?.length
@@ -211,22 +213,34 @@ export default function Home() {
                       lg={6}
                       key={item.id || item.rowIndex}
                     >
-                      <Card
-                        hoverable
-                        cover={
+                      <div
+                        role="button"
+                        tabIndex={0}
+                        onClick={() => setSelectedProduct(item)}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter" || e.key === " ") {
+                            e.preventDefault();
+                            setSelectedProduct(item);
+                          }
+                        }}
+                        className="cursor-pointer h-full"
+                      >
+                        <Card
+                          hoverable
+                          cover={
                           item.image ? (
-                            <div className="h-48 relative overflow-hidden group">
+                            <div className="h-56 relative overflow-hidden group bg-white">
                               <ImageWithPlaceholder
                                 alt={item.name}
                                 src={item.image}
                                 fill
                                 className="object-cover transition-transform duration-300 group-hover:scale-105"
                                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                                placeholderClassName="h-48"
+                                placeholderClassName="h-56"
                               />
                             </div>
                           ) : (
-                            <div className="h-48 bg-gray-200 flex items-center justify-center text-gray-400">
+                            <div className="h-56 bg-gray-200 flex items-center justify-center text-gray-400">
                               Sin imagen
                             </div>
                           )
@@ -296,6 +310,7 @@ export default function Home() {
                           }
                         />
                       </Card>
+                      </div>
                     </Col>
                   );
                 })}
@@ -373,6 +388,75 @@ export default function Home() {
           </div>
         </div>
       </Footer>
+
+      <Modal
+        open={!!selectedProduct}
+        onCancel={() => setSelectedProduct(null)}
+        footer={null}
+        width={640}
+        className="product-detail-modal"
+        centered
+        destroyOnHidden
+      >
+        {selectedProduct && (
+          <div className="flex flex-col md:flex-row gap-6 py-2">
+            <div className="md:w-2/5 shrink-0">
+              {selectedProduct.image ? (
+                <div className="relative w-full aspect-square max-h-80 md:max-h-none md:min-h-64 rounded-xl overflow-hidden bg-white">
+                  <ImageWithPlaceholder
+                    alt={selectedProduct.name}
+                    src={selectedProduct.image}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, 256px"
+                  />
+                </div>
+              ) : (
+                <div className="w-full aspect-square max-h-80 md:max-h-none md:min-h-64 rounded-xl bg-gray-200 flex items-center justify-center text-gray-400">
+                  Sin imagen
+                </div>
+              )}
+            </div>
+            <div className="md:w-3/5 flex flex-col min-w-0">
+              <Title level={3} className="!mt-0 !mb-2 text-gray-800">
+                {selectedProduct.name}
+              </Title>
+              <Paragraph className="text-gray-600 mb-4 grow">
+                {selectedProduct.description}
+              </Paragraph>
+              <Text strong className="text-xl text-green-600 font-bold mb-6">
+                MX${selectedProduct.price}
+              </Text>
+              <a
+                href={
+                  selectedProduct.action
+                    ? `${selectedProduct.action}?text=${encodeURIComponent(
+                        `¡Hola! Me interesa obtener más información sobre: *${selectedProduct.name}*\n\n¿Podrían proporcionarme detalles adicionales y disponibilidad?`
+                      )}`
+                    : "https://wa.me/522225230942"
+                }
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block w-full"
+              >
+                <Button
+                  type="primary"
+                  icon={<RiWhatsappFill />}
+                  className="w-full"
+                  size="large"
+                  style={{
+                    backgroundColor: "#16a34a",
+                    borderColor: "#16a34a",
+                    color: "#ffffff",
+                  }}
+                >
+                  Contactar
+                </Button>
+              </a>
+            </div>
+          </div>
+        )}
+      </Modal>
     </Layout>
   );
 }
