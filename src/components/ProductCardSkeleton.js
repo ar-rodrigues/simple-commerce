@@ -1,5 +1,5 @@
-'use client'
-import { Card, Skeleton } from 'antd';
+"use client";
+import { Card, Skeleton } from "antd";
 
 export default function ProductCardSkeleton() {
   return (
@@ -9,11 +9,11 @@ export default function ProductCardSkeleton() {
         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer"></div>
       </div>
       <Card.Meta
-        title={<Skeleton.Input active size="small" style={{ width: '80%' }} />}
+        title={<Skeleton.Input active size="small" style={{ width: "80%" }} />}
         description={
           <div className="flex flex-col gap-2 mt-2">
-            <Skeleton paragraph={{ rows: 2, width: ['100%', '80%'] }} active />
-            <Skeleton.Input active size="small" style={{ width: '40%' }} />
+            <Skeleton paragraph={{ rows: 2, width: ["100%", "80%"] }} active />
+            <Skeleton.Input active size="small" style={{ width: "40%" }} />
           </div>
         }
       />
