@@ -1,6 +1,7 @@
-import { AntdRegistry } from '@ant-design/nextjs-registry';
+import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { Geist, Geist_Mono } from "next/font/google";
 import AuthProvider from "@/components/SessionProvider";
+import ServiceWorkerRegistration from "@/components/ServiceWorkerRegistration";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -14,8 +15,12 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"
+  ),
   title: "Catálogo Pro",
-  description: "Catálogo de productos con gestión vía CMS. Tu socio de confianza para productos de calidad y servicio excepcional",
+  description:
+    "Catálogo de productos con gestión vía CMS. Tu socio de confianza para productos de calidad y servicio excepcional",
   icons: {
     icon: [
       { url: "/favicon.ico" },
@@ -27,10 +32,10 @@ export const metadata = {
     ],
   },
   manifest: "/site.webmanifest",
-  themeColor: "#16a34a",
   openGraph: {
     title: "Catálogo Pro",
-    description: "Catálogo de productos con gestión vía CMS. Tu socio de confianza para productos de calidad y servicio excepcional",
+    description:
+      "Catálogo de productos con gestión vía CMS. Tu socio de confianza para productos de calidad y servicio excepcional",
     type: "website",
     images: [
       {
@@ -44,9 +49,14 @@ export const metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Catálogo Pro",
-    description: "Catálogo de productos con gestión vía CMS. Tu socio de confianza para productos de calidad y servicio excepcional",
+    description:
+      "Catálogo de productos con gestión vía CMS. Tu socio de confianza para productos de calidad y servicio excepcional",
     images: ["/logo.jpeg"],
   },
+};
+
+export const viewport = {
+  themeColor: "#16a34a",
 };
 
 export default function RootLayout({ children }) {
@@ -56,6 +66,7 @@ export default function RootLayout({ children }) {
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <AuthProvider>
+          <ServiceWorkerRegistration />
           <AntdRegistry>{children}</AntdRegistry>
         </AuthProvider>
       </body>

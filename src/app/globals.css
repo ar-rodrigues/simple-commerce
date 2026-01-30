@@ -19,6 +19,13 @@
   }
 }
 
+/* Admin panel: always light background so no black bar shows during loading */
+body.admin-panel-active {
+  --background: #f9fafb;
+  --foreground: #171717;
+  background: #f9fafb !important;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
@@ -27,14 +34,28 @@ body {
 
 /* Carousel Styles */
 .carousel-dots {
-  bottom: 20px !important;
+  bottom: 16px !important;
+}
+
+@media (min-width: 640px) {
+  .carousel-dots {
+    bottom: 20px !important;
+  }
 }
 
 .carousel-dots li button {
   background: rgba(255, 255, 255, 0.7) !important;
   border: 2px solid rgba(255, 255, 255, 0.9) !important;
-  width: 12px !important;
-  height: 12px !important;
+  width: 14px !important;
+  height: 14px !important;
+  border-radius: 50%;
+}
+
+@media (min-width: 640px) {
+  .carousel-dots li button {
+    width: 12px !important;
+    height: 12px !important;
+  }
 }
 
 .carousel-dots li.slick-active button {
@@ -54,6 +75,23 @@ body {
 /* Admin Header - Override transparent background */
 .admin-header.ant-layout-header {
   background: linear-gradient(to right, #16a34a, #15803d) !important;
+}
+
+/* Admin header Salir button - ensure white text on green for contrast */
+.admin-header-logout.ant-btn {
+  color: #ffffff !important;
+}
+
+.admin-header-logout.ant-btn:hover {
+  color: #ffffff !important;
+  background-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+.admin-header-logout.ant-btn .anticon,
+.admin-header-logout.ant-btn .react-icons,
+.admin-header-logout.ant-btn svg,
+.admin-header-logout.ant-btn span {
+  color: #ffffff !important;
 }
 
 /* Better text contrast */
@@ -130,6 +168,24 @@ body {
 .admin-table .ant-table-tbody > tr > td {
   padding: 16px 12px;
   border-bottom: 1px solid #f3f4f6;
+}
+
+/* Admin table and modal buttons - force white text/icons on green backgrounds */
+.admin-page .ant-btn-primary {
+  color: #fff !important;
+}
+
+.admin-page .ant-btn-primary .anticon {
+  color: #fff !important;
+}
+
+.admin-page .ant-btn.bg-red-600,
+.admin-page .ant-btn.bg-red-600 .anticon,
+.admin-page .ant-btn.bg-red-600 svg,
+.admin-page .admin-btn-delete,
+.admin-page .admin-btn-delete .anticon,
+.admin-page .admin-btn-delete svg {
+  color: #ffffff !important;
 }
 
 /* Admin Modal Styles */
@@ -229,6 +285,76 @@ body {
   background: #94a3b8;
 }
 
+/* Admin layout: fill viewport with light background (avoids black bar during loading) */
+.admin-page.ant-layout {
+  background: #f9fafb !important;
+  min-height: 100vh;
+}
+
+.admin-page .ant-layout-content.admin-content {
+  background: #f9fafb !important;
+  min-height: 0;
+}
+
+/* Admin Sidebar - Clean white theme */
+.admin-sidebar,
+aside.admin-sidebar {
+  background-color: #ffffff !important;
+  background: #ffffff !important;
+}
+
+.admin-sidebar .ant-menu {
+  background: #ffffff !important;
+  border-right: none !important;
+}
+
+.admin-sidebar a {
+  color: #15803d !important; /* green-700 */
+  background-color: #f0fdf4 !important; /* green-50 */
+  transition: all 0.2s ease;
+  margin-bottom: 4px;
+}
+
+.admin-sidebar a:hover {
+  background-color: #dcfce7 !important; /* green-100 */
+  color: #166534 !important; /* green-800 */
+}
+
+.admin-sidebar a.bg-green-600 {
+  background-color: #16a34a !important;
+  color: #ffffff !important;
+}
+
+.admin-sidebar a.bg-green-600 .react-icons,
+.admin-sidebar a.bg-green-600 svg {
+  color: #ffffff !important;
+}
+
+/* Force icons in buttons to be white when they have text-white or similar */
+.ant-btn .anticon,
+.ant-btn svg {
+  vertical-align: middle;
+}
+
+/* Fix for icons not showing in buttons */
+.admin-page .ant-btn .react-icons,
+.admin-page .ant-btn svg {
+  display: inline-block;
+  color: inherit;
+}
+
+/* Admin Table Styles */
+.admin-inicio-collapse.ant-collapse
+  > .ant-collapse-item
+  > .ant-collapse-content
+  > .ant-collapse-content-box {
+  transition: padding 0.2s ease;
+}
+
+.admin-inicio-collapse .ant-collapse-header {
+  align-items: center;
+}
+
 /* Stats Card Hover Effect */
 .stats-card {
   transition: all 0.3s ease;
@@ -240,18 +366,30 @@ body {
 
 /* Admin Page - Override ALL Ant Design default blue buttons to green */
 .admin-page .ant-btn-primary,
-.admin-page .ant-btn-primary:not([style*="background"]):not([style*="backgroundColor"]) {
+.admin-page
+  .ant-btn-primary:not([style*="background"]):not([style*="backgroundColor"]) {
   background: #16a34a !important;
   border-color: #16a34a !important;
   color: #ffffff !important;
 }
 
-.admin-page .ant-btn-primary:hover:not([style*="background"]):not([style*="backgroundColor"]) {
+.admin-page .ant-btn-primary .react-icons,
+.admin-page .ant-btn-primary svg {
+  color: #ffffff !important;
+}
+
+.admin-page
+  .ant-btn-primary:hover:not([style*="background"]):not(
+    [style*="backgroundColor"]
+  ) {
   background: #15803d !important;
   border-color: #15803d !important;
 }
 
-.admin-page .ant-btn-primary:focus:not([style*="background"]):not([style*="backgroundColor"]) {
+.admin-page
+  .ant-btn-primary:focus:not([style*="background"]):not(
+    [style*="backgroundColor"]
+  ) {
   background: #16a34a !important;
   border-color: #16a34a !important;
   box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.2) !important;
@@ -276,12 +414,16 @@ body {
   color: #ffffff !important;
 }
 
-.ant-btn-primary:hover:not([style*="background"]):not([style*="backgroundColor"]) {
+.ant-btn-primary:hover:not([style*="background"]):not(
+    [style*="backgroundColor"]
+  ) {
   background: #15803d !important;
   border-color: #15803d !important;
 }
 
-.ant-btn-primary:focus:not([style*="background"]):not([style*="backgroundColor"]) {
+.ant-btn-primary:focus:not([style*="background"]):not(
+    [style*="backgroundColor"]
+  ) {
   background: #16a34a !important;
   border-color: #16a34a !important;
   box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.2) !important;

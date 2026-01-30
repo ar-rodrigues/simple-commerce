@@ -1,5 +1,5 @@
-import { google } from 'googleapis';
-import { Readable } from 'stream';
+import { google } from "googleapis";
+import { Readable } from "stream";
 
 /**
  * Creates an OAuth2 client using the user's access token
@@ -21,7 +21,13 @@ function getOAuthClient(accessToken) {
  * @returns {boolean}
  */
 export function isValidImageType(mimeType) {
-  const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+  const validTypes = [
+    "image/jpeg",
+    "image/jpg",
+    "image/png",
+    "image/gif",
+    "image/webp",
+  ];
   return validTypes.includes(mimeType);
 }
 
@@ -43,25 +49,34 @@ export function isValidFileSize(size) {
  * @param {string} accessToken - OAuth access token from user session
  * @returns {Promise<{id: string, webViewLink: string, webContentLink: string, publicUrl: string}>}
  */
-export async function uploadFileToDrive(fileBuffer, fileName, mimeType, accessToken) {
+export async function uploadFileToDrive(
+  fileBuffer,
+  fileName,
+  mimeType,
+  accessToken
+) {
   try {
     // Validate file type
     if (!isValidImageType(mimeType)) {
-      throw new Error('Tipo de archivo no válido. Solo se permiten imágenes (JPEG, PNG, GIF, WebP)');
+      throw new Error(
+        "Tipo de archivo no válido. Solo se permiten imágenes (JPEG, PNG, GIF, WebP)"
+      );
     }
 
     // Validate file size
     if (!isValidFileSize(fileBuffer.length)) {
-      throw new Error('El archivo es demasiado grande. Tamaño máximo: 10MB');
+      throw new Error("El archivo es demasiado grande. Tamaño máximo: 10MB");
     }
 
     if (!accessToken) {
-      throw new Error('Token de acceso no disponible. Por favor, inicia sesión nuevamente.');
+      throw new Error(
+        "Token de acceso no disponible. Por favor, inicia sesión nuevamente."
+      );
     }
 
     // Create OAuth client with user's access token
     const auth = getOAuthClient(accessToken);
-    const drive = google.drive({ version: 'v3', auth });
+    const drive = google.drive({ version: "v3", auth });
 
     // Get folder ID (optional - if not provided, uploads to root)
     const folderId = process.env.GOOGLE_DRIVE_FOLDER_ID;
@@ -86,7 +101,7 @@ export async function uploadFileToDrive(fileBuffer, fileName, mimeType, accessTo
         mimeType: mimeType,
         body: stream,
       },
-      fields: 'id, webViewLink, webContentLink',
+      fields: "id, webViewLink, webContentLink",
     });
 
     const fileId = response.data.id;
@@ -96,21 +111,24 @@ export async function uploadFileToDrive(fileBuffer, fileName, mimeType, accessTo
       await drive.permissions.create({
         fileId: fileId,
         requestBody: {
-          role: 'reader',
-          type: 'anyone',
+          role: "reader",
+          type: "anyone",
         },
       });
     } catch (permError) {
       // If permission already exists, that's okay
       if (permError.code !== 409) {
-        console.warn('Warning: Could not set public permission:', permError.message);
+        console.warn(
+          "Warning: Could not set public permission:",
+          permError.message
+        );
       }
     }
 
     // Get updated file info to ensure we have the latest webContentLink
     const fileInfo = await drive.files.get({
       fileId: fileId,
-      fields: 'id, webViewLink, webContentLink, thumbnailLink',
+      fields: "id, webViewLink, webContentLink, thumbnailLink",
     });
 
     // Generate direct image URL for Google Drive
@@ -118,7 +136,7 @@ export async function uploadFileToDrive(fileBuffer, fileName, mimeType, accessTo
     // Format: https://drive.google.com/thumbnail?id=FILE_ID&sz=w1000
     // This format works well for public images and doesn't require authentication
     const publicUrl = `https://drive.google.com/thumbnail?id=${fileId}&sz=w1000`;
-    
+
     // Alternative: uc?export=view format (fallback)
     const alternativeUrl = `https://drive.google.com/uc?export=view&id=${fileId}`;
 
@@ -130,22 +148,32 @@ export async function uploadFileToDrive(fileBuffer, fileName, mimeType, accessTo
       alternativeUrl: alternativeUrl,
     };
   } catch (error) {
-    console.error('Error uploading file to Drive:', error);
-    
+    console.error("Error uploading file to Drive:", error);
+
     // Provide more helpful error messages
-    if (error.code === 401 || error.message?.includes('Invalid Credentials')) {
-      throw new Error('Sesión expirada. Por favor, inicia sesión nuevamente.');
+    if (error.code === 401 || error.message?.includes("Invalid Credentials")) {
+      throw new Error("Sesión expirada. Por favor, inicia sesión nuevamente.");
     }
     if (error.code === 403) {
       // Check if it's a scope issue
-      if (error.message?.includes('insufficient authentication scopes') || 
-          error.message?.includes('Request had insufficient authentication scopes')) {
-        throw new Error('SCOPE_ERROR: Por favor, cierra sesión y vuelve a iniciar sesión para otorgar permisos de Google Drive.');
+      if (
+        error.message?.includes("insufficient authentication scopes") ||
+        error.message?.includes(
+          "Request had insufficient authentication scopes"
+        )
+      ) {
+        throw new Error(
+          "SCOPE_ERROR: Por favor, cierra sesión y vuelve a iniciar sesión para otorgar permisos de Google Drive."
+        );
       }
-      throw new Error('No tienes permisos para subir archivos. Verifica que la API de Google Drive esté habilitada.');
+      throw new Error(
+        "No tienes permisos para subir archivos. Verifica que la API de Google Drive esté habilitada."
+      );
     }
-    
-    throw new Error(error.message || 'Error al subir el archivo a Google Drive');
+
+    throw new Error(
+      error.message || "Error al subir el archivo a Google Drive"
+    );
   }
 }
 
@@ -156,22 +184,22 @@ export async function uploadFileToDrive(fileBuffer, fileName, mimeType, accessTo
  */
 export function extractFileIdFromUrl(url) {
   if (!url) return null;
-  
+
   // Match various Google Drive URL formats
   const patterns = [
-    /[?&]id=([a-zA-Z0-9_-]+)/,  // uc?id=FILE_ID or uc?export=view&id=FILE_ID
-    /\/d\/([a-zA-Z0-9_-]+)/,    // /d/FILE_ID
+    /[?&]id=([a-zA-Z0-9_-]+)/, // uc?id=FILE_ID or uc?export=view&id=FILE_ID
+    /\/d\/([a-zA-Z0-9_-]+)/, // /d/FILE_ID
     /\/file\/d\/([a-zA-Z0-9_-]+)/, // /file/d/FILE_ID
     /\/thumbnail\?id=([a-zA-Z0-9_-]+)/, // thumbnail?id=FILE_ID
   ];
-  
+
   for (const pattern of patterns) {
     const match = url.match(pattern);
     if (match && match[1]) {
       return match[1];
     }
   }
-  
+
   return null;
 }
 
@@ -182,20 +210,20 @@ export function extractFileIdFromUrl(url) {
  */
 export function normalizeDriveImageUrl(url) {
   if (!url) return url;
-  
+
   // If it's already a thumbnail URL, return as is
-  if (url.includes('drive.google.com/thumbnail')) {
+  if (url.includes("drive.google.com/thumbnail")) {
     return url;
   }
-  
+
   // Extract file ID from the URL
   const fileId = extractFileIdFromUrl(url);
-  
+
   // If we found a file ID and it's a Google Drive URL, convert to thumbnail format
-  if (fileId && url.includes('drive.google.com')) {
+  if (fileId && url.includes("drive.google.com")) {
     return `https://drive.google.com/thumbnail?id=${fileId}&sz=w1000`;
   }
-  
+
   // If it's not a Google Drive URL, return as is
   return url;
 }
@@ -209,21 +237,23 @@ export function normalizeDriveImageUrl(url) {
 export async function deleteFileFromDrive(fileId, accessToken) {
   try {
     if (!fileId || !accessToken) {
-      console.warn('Cannot delete file from Drive: missing fileId or accessToken');
+      console.warn(
+        "Cannot delete file from Drive: missing fileId or accessToken"
+      );
       return;
     }
 
     const auth = getOAuthClient(accessToken);
-    const drive = google.drive({ version: 'v3', auth });
+    const drive = google.drive({ version: "v3", auth });
 
     await drive.files.delete({
       fileId: fileId,
     });
-    
+
     console.log(`Successfully deleted file ${fileId} from Drive`);
   } catch (error) {
     // Log error details for debugging
-    console.error('Error deleting file from Drive:', {
+    console.error("Error deleting file from Drive:", {
       fileId,
       errorCode: error.code,
       errorMessage: error.message,
